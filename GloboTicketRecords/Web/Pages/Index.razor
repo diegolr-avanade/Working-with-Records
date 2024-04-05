@@ -1,6 +1,5 @@
 ﻿@page "/"
 @using Web.Mappers
-@using Web.ViewModels
 @using global::Shared.Dtos
 @inject HttpClient HttpClient
 @inject EventMapper EventMapper
@@ -40,12 +39,12 @@
 
 @code
 {
-    IEnumerable<EventViewModel> _events;
+    IEnumerable<ListEventViewModel> _events;
 
     protected override async void OnInitialized()
     {
         var eventDtos = await HttpClient.GetFromJsonAsync<EventDto[]>("/event");
-        _events = eventDtos.Select(d => EventMapper.ConvertDtoToViewModel(d));
+        _events = (eventDtos ?? Array.Empty<EventDto>()).Select(d => EventMapper.ConvertDtoToViewModel(d));
         StateHasChanged();
     }
 }
